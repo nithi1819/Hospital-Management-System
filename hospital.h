@@ -85,7 +85,7 @@ namespace tools {
     int toMinutes(std::string hhmm);       // "09:30" -> 570, -1 if bad
     std::string toClock(int minutes);      // 570 -> "09:30"
     bool goodDate(std::string d);       // yyyy-mm-dd
-    std::string sanitize(std::string s);   // strips | so it can't break the filePath
+    std::string sanitize(std::string s);   // strips | so it can't break the file
 }
 
 #endif

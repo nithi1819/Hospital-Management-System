@@ -201,7 +201,7 @@ static void nurseMenu() {
             int days = askInt("Days worked: ", n->getDays());
             int nightShifts = askInt("Night shifts: ", n->getNightShifts());
             if (days < 0 || days > 31 || nightShifts < 0 || nightShifts > days)
-                cout << "  -> Days/nightShifts look wrong, leaving them alone.\n";
+                cout << "  -> Days or night shifts look wrong, leaving them alone.\n";
             else { n->setDays(days); n->setNightShifts(nightShifts); }
             cout << "  -> Updated.\n";
         }

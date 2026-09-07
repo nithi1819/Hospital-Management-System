@@ -5,6 +5,8 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <cstdlib>
+#include <cctype>
 #include <sys/stat.h>
 
 using namespace std;
@@ -26,13 +28,41 @@ vector<string> split(string s, char sep) {
     return out;
 }
 
+// read as text and convert, instead of cin >> int, so a typo can't jam the stream.
+// atoi returns 0 for junk and gives no way to tell that apart from a real 0,
+// so check the characters first and only convert if they are all digits.
 int toInt(string s, int fallback) {
-    // getline + stoi instead of cin >> int, so a typo can't jam the stream
-    try { return stoi(trim(s)); } catch (...) { return fallback; }
+    s = trim(s);
+    if (s.empty()) return fallback;
+
+    size_t i = 0;
+    if (s[0] == '-' || s[0] == '+') i = 1;
+    if (i >= s.size()) return fallback;
+
+    for (; i < s.size(); i++)
+        if (!isdigit((unsigned char)s[i])) return fallback;
+
+    return atoi(s.c_str());
 }
 
 double toDouble(string s, double fallback) {
-    try { return stod(trim(s)); } catch (...) { return fallback; }
+    s = trim(s);
+    if (s.empty()) return fallback;
+
+    size_t i = 0;
+    if (s[0] == '-' || s[0] == '+') i = 1;
+    if (i >= s.size()) return fallback;
+
+    bool dot = false;
+    for (; i < s.size(); i++) {
+        if (s[i] == '.') {
+            if (dot) return fallback;   // two dots is not a number
+            dot = true;
+        } else if (!isdigit((unsigned char)s[i])) {
+            return fallback;
+        }
+    }
+    return atof(s.c_str());
 }
 
 int toMinutes(string hhmm) {
